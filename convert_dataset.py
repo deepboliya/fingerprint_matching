@@ -1,7 +1,7 @@
 import os
 import cv2
 import shutil
-
+import numpy as np
 
 def convert_images_to_grayscale(input_dir, output_dir):
     # Copy the directory structure to the new output directory
@@ -34,8 +34,7 @@ def convert_images_to_grayscale(input_dir, output_dir):
                 
                 eq_img = cv2.equalizeHist(gray_img)
                 AMT_image = cv2.adaptiveThreshold(eq_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,11,2)  
-
-                
+                print(np.shape(AMT_image))
                 # Save the grayscale image to the same path in the output directory structure
                 cv2.imwrite(output_file_path, AMT_image)
             except Exception as e:
@@ -43,8 +42,8 @@ def convert_images_to_grayscale(input_dir, output_dir):
 
 # Replace 'original_main_directory' with the name of your main input directory
 # Replace 'new_main_directory' with the desired name for the output directory
-input_dir = "../PolyU/processed_contactless_2d_fingerprint_images"
-output_dir = "../PolyU/amt_contactless_2d_fingerprint_images"
+input_dir = "/home/skully/Acads/ee678-wavelets/final_project_testing/PolyU/processed_contactless_2d_fingerprint_images"
+output_dir = "/home/skully/Acads/ee678-wavelets/final_project_testing/PolyU/amt_contactless_2d_fingerprint_images"
 
 # Convert images to grayscale and save in the same structure under new_main_directory
 convert_images_to_grayscale(input_dir, output_dir)
