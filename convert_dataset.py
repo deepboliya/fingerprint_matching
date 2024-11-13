@@ -17,7 +17,7 @@ def convert_images_to_grayscale(input_dir, output_dir):
             # Define the corresponding output file path
             relative_path = os.path.relpath(subdir, input_dir)  # Get the relative path
             output_subdir = os.path.join(output_dir, relative_path)
-            output_file_path = os.path.join(output_subdir, file)
+            output_file_path = os.path.join(output_subdir, os.path.splitext(file)[0] + ".jpg")
 
             # Ensure output sub-directory exists
             os.makedirs(output_subdir, exist_ok=True)
@@ -33,10 +33,17 @@ def convert_images_to_grayscale(input_dir, output_dir):
                 gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                 
                 eq_img = cv2.equalizeHist(gray_img)
-                AMT_image = cv2.adaptiveThreshold(eq_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,11,2)  
-                print(np.shape(AMT_image))
-                # Save the grayscale image to the same path in the output directory structure
-                cv2.imwrite(output_file_path, AMT_image)
+
+                normalized_img = cv2.normalize(gray_img, None, 0, 255, cv2.NORM_MINMAX)
+                
+                # Save the normalized grayscale image in JPEG format
+                cv2.imwrite(output_file_path, normalized_img, [int(cv2.IMWRITE_JPEG_QUALITY), 95])
+
+                # AMT_image = cv2.adaptiveThreshold(eq_img,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,11,2)  
+
+                
+                # # Save the grayscale image to the same path in the output directory structure
+                # cv2.imwrite(output_file_path, AMT_image)
             except Exception as e:
                 print(f"Error processing {input_file_path}: {e}")
 
